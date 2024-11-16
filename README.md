@@ -1,5 +1,5 @@
 # Projeto Dev Mobilemed
-## Sistema de Gerenciamento de Consultas Médicas**
+## Sistema de Gerenciamento de Consultas Médicas
 
 ## Objetivo:
 Desenvolver um pequeno sistema de gerenciamento de consultas médicas utilizando C# com .NET, implementando os conceitos de CRUD (Create, Read, Update, Delete), o padrão de design MVVM (Model-View-ViewModel).
