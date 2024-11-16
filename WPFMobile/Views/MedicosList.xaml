@@ -1,0 +1,50 @@
+﻿<Page x:Class="WPFMobile.Views.MedicosList"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WPFMobile.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="800"
+      Title="MedicosList">
+
+    <Grid>
+        <StackPanel Margin="10">
+            <Label Content="Nome do Médico" />
+            <TextBox Text="{Binding MedicoNome, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+            <Label Content="CRM do Médico" />
+            <TextBox Text="{Binding MedicoCrm, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+            <Label Content="Especialidade do Médico" />
+            <TextBox Text="{Binding MedicoEspecialidade, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+            <Label Content="Telefone do Médico" />
+            <TextBox Text="{Binding MedicoTelefone, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
+                <Button Content="Listar Todos" Command="{Binding ConsultarMedicos}" Margin="0,0,10,0"/>
+                <Button Content="Salvar/Editar" Command="{Binding SalvarMedico}" Margin="0,0,10,0"/>
+                <Button Content="Deletar" Command="{Binding DeletarMedico}" Margin="0,0,10,0"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                <Button Content="Pesquisar" Command="{Binding PesquisarMedico}" Margin="0,0,10,0"/>
+                <TextBox Text="{Binding NomePesquisa, UpdateSourceTrigger=PropertyChanged}" Width="715" Height="17"/>
+            </StackPanel>
+
+            <DataGrid x:Name="DGMedicos" ItemsSource="{Binding Medicos}" 
+                  SelectedItem="{Binding MedicoSelecionado}"
+                  AutoGenerateColumns="False" Margin="10" CanUserAddRows="False"
+                  IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding medicoId}" Width="100*"/>
+                    <DataGridTextColumn Header="Nome" Binding="{Binding medicoNome}" Width="100*"/>
+                    <DataGridTextColumn Header="CRM" Binding="{Binding medicoCrm}" Width="100*"/>
+                    <DataGridTextColumn Header="Especialidade" Binding="{Binding medicoEspecialidade}" Width="100*"/>
+                    <DataGridTextColumn Header="Telefone" Binding="{Binding medicoTelefone}" Width="100*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</Page>
