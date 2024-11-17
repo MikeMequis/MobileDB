@@ -50,7 +50,6 @@ namespace WPFMobile
             {
                 if (PacienteSelecionado == null)
                 {
-                    // Criação de um novo paciente
                     var novoPaciente = new PacienteModel
                     {
                         pacienteNome = PacienteNome,
@@ -64,12 +63,10 @@ namespace WPFMobile
                     context.Pacientes.Add(novoPaciente);
                     context.SaveChanges();
 
-                    // Adiciona o novo paciente à coleção observável
                     Pacientes.Add(novoPaciente);
                 }
                 else
                 {
-                    // Atualização de paciente existente
                     var paciente = context.Pacientes.Find(PacienteSelecionado.pacienteId);
                     if (paciente != null)
                     {
