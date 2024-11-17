@@ -64,6 +64,10 @@ namespace WPFMobile
                         MedicoId = MedicoSelecionado?.medicoId ?? 0
                     };
 
+                    context.Database.ExecuteSqlRaw(@"DECLARE @MaxId INT;
+                                                    SELECT @MaxId = MAX(ConsultaId) FROM Consultas;
+                                                    DBCC CHECKIDENT ('Consultas', RESEED, @MaxId);");
+
                     context.Consultas.Add(novaConsulta);
                     context.SaveChanges();
 
@@ -72,7 +76,8 @@ namespace WPFMobile
                 else
                 {
                     var consultaExistente = context.Consultas
-                                                    .FirstOrDefault(c => c.ConsultaId == ConsultaSelecionada.ConsultaId);
+                                                    .FirstOrDefault(c =>
+                                                    c.ConsultaId == ConsultaSelecionada.ConsultaId);
 
                     if (consultaExistente != null)
                     {
@@ -88,14 +93,13 @@ namespace WPFMobile
             }
         }
 
-
         public void ObterConsultas(object obj)
         {
             using (var context = new AppDBContext())
             {
                 var lista = context.Consultas
                                    .Include(c => c.Paciente)
-                                   .Include(c => c.Medico)  
+                                   .Include(c => c.Medico)
                                    .ToList();
 
                 Consultas.Clear();

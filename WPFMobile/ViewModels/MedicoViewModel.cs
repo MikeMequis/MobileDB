@@ -49,7 +49,6 @@ namespace WPFMobile
             {
                 if (MedicoSelecionado == null)
                 {
-                    // Criação de um novo medico
                     var novoMedico = new MedicoModel
                     {
                         medicoNome = MedicoNome,
@@ -61,12 +60,10 @@ namespace WPFMobile
                     context.Medicos.Add(novoMedico);
                     context.SaveChanges();
 
-                    // Adiciona o novo medico à coleção observável
                     Medicos.Add(novoMedico);
                 }
                 else
                 {
-                    // Atualização de medico existente
                     var medico = context.Medicos.Find(MedicoSelecionado.medicoId);
                     if (medico != null)
                     {
