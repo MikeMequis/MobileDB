@@ -4,16 +4,22 @@
 
     public class SeedDataBase
     {
+        // Method to seed the database with initial data
         public static void Seed()
         {
+            // Create a new instance of the AppDBContext class
+            // The Using method guarantees that the context is disposed of after the block of code is executed
             using (var context = new AppDBContext())
             {
+                // EnsureCreated method creates the database if it does not exist
                 context.Database.EnsureCreated();
 
+                // ExecuteSqlRaw method is used to execute raw SQL queries
                 context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Pacientes', RESEED, 0)");
                 context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Medicos', RESEED, 0)");
                 context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Consultas', RESEED, 0)");
 
+                // If the Pacientes table is empty, add the initial data
                 if (context.Pacientes != null && !context.Pacientes.Any())
                 {
                     context.Pacientes.AddRange(
@@ -57,6 +63,7 @@
                         }
                     );                    
                 }
+                // Saves the changes to the database
                 context.SaveChanges();
             }
         }

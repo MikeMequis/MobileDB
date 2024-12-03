@@ -35,3 +35,10 @@ namespace WPFMobile.Migrations
         }
     }
 }
+
+// Migration commands:
+// get-help EntityFrameworkCore
+// Add-Migration <Migration-Name>
+// Remove-Migration
+// Update-Database
+// Drop-Database

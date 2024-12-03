@@ -5,20 +5,33 @@ using WPFMobile.Services;
 
 namespace WPFMobile
 {
+    // ViewModel is used to manage the data and logic of the application
+    // It is responsible for the interaction between the View and the Model
+    // It is a class that inherits from INotifyPropertyChanged, because of the data binding in WPF
     public class PacienteViewModel : INotifyPropertyChanged
     {
+        // Event that is triggered when a property changes
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        // ObservableCollection is a collection that notifies when items are added, removed, or updated
         public ObservableCollection<PacienteModel> Pacientes { get; set; }
+
+        // Method that triggers the PropertyChanged event
+        // It is used to notify the View that a property has changed
+        // Every program that uses data binding have this method
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        // ICommand is an interface that represents a command
+        // It is used to bind a command to a control in the View
         public ICommand SalvarPaciente { get; set; }
         public ICommand ConsultarPacientes { get; set; }
         public ICommand DeletarPaciente { get; set; }
         public ICommand PesquisarPaciente { get; set; }
 
+        // Constructor of the ViewModel
         public PacienteViewModel()
         {
             Pacientes = new ObservableCollection<PacienteModel>();
@@ -28,8 +41,10 @@ namespace WPFMobile
             PesquisarPaciente = new RelayCommand(PesquisarPacientePorNome);
         }
 
+        // Property used to store the name of the patient to be searched
         public string NomePesquisa { get; set; }
 
+        // Method to search for a patient by name
         public void PesquisarPacientePorNome(object obj)
         {
             using (var context = new AppDBContext())
@@ -44,6 +59,7 @@ namespace WPFMobile
             }
         }
 
+        // Method to save or edit a patient
         public void SalvarOuEditarPaciente(object obj)
         {
             using (var context = new AppDBContext())
@@ -90,7 +106,7 @@ namespace WPFMobile
             }
         }
 
-
+        // Method to delete a selected patient
         public void DeletarPacienteSelecionado(object obj)
         {
             if (PacienteSelecionado == null) return;
@@ -103,6 +119,7 @@ namespace WPFMobile
             }
         }
 
+        // Method to get all patients
         public void ObterPacientes(object obj)
         {
             using (var context = new AppDBContext())
@@ -116,6 +133,7 @@ namespace WPFMobile
             }
         }
 
+        // Stores the data from a selected patient
         private PacienteModel pacienteSelecionado;
         public PacienteModel PacienteSelecionado
         {

@@ -10,6 +10,7 @@ namespace WPFMobile
         {
             InitializeComponent();
 
+            // Create the database and seed it with some data
             using (var db = new AppDBContext())
             {
                 db.Database.EnsureCreated();
@@ -17,6 +18,7 @@ namespace WPFMobile
             }
         }
 
+        // Navigation buttons
         private void Button_Click1(object sender, RoutedEventArgs e)
         {
             main.Content = new PacientesList();

@@ -13,6 +13,8 @@
             <Button Content="Médicos" Click="Button_Click2"/>
             <Button Content="Consultas" Click="Button_Click3"/>
         </StackPanel>
+        
+        <!-- Frame is a container that can hold a single Page -->
         <Frame x:Name ="main" Margin="0,80,0,0"/>
     </Grid>
 </Window>

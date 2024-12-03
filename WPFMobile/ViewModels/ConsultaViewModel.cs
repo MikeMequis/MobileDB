@@ -9,15 +9,17 @@ namespace WPFMobile
     public class ConsultaViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-
         public ObservableCollection<ConsultaModel> Consultas { get; set; }
         public ObservableCollection<MedicoModel> Medicos { get; set; } = new();
         public ObservableCollection<PacienteModel> Pacientes { get; set; } = new();
-
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public ICommand SalvarConsulta { get; set; }
+        public ICommand ConsultarConsultas { get; set; }
+        public ICommand DeletarConsulta { get; set; }
 
         public ConsultaViewModel()
         {
@@ -28,22 +30,24 @@ namespace WPFMobile
             DeletarConsulta = new RelayCommand(DeletarConsultaSelecionada);
         }
 
-        public ICommand SalvarConsulta { get; set; }
-        public ICommand ConsultarConsultas { get; set; }
-        public ICommand DeletarConsulta { get; set; }
-
         public void CarregarMedicosEPacientes()
         {
             using (var context = new AppDBContext())
             {
+                var dados = new
+                {
+                    Medicos = context.Medicos.ToList(),
+                    Pacientes = context.Pacientes.ToList()
+                };
+
                 Medicos.Clear();
-                foreach (var medico in context.Medicos)
+                foreach (var medico in dados.Medicos)
                 {
                     Medicos.Add(medico);
                 }
 
                 Pacientes.Clear();
-                foreach (var paciente in context.Pacientes)
+                foreach (var paciente in dados.Pacientes)
                 {
                     Pacientes.Add(paciente);
                 }
@@ -64,32 +68,22 @@ namespace WPFMobile
                         MedicoId = MedicoSelecionado?.medicoId ?? 0
                     };
 
-                    context.Database.ExecuteSqlRaw(@"DECLARE @MaxId INT;
-                                                    SELECT @MaxId = MAX(ConsultaId) FROM Consultas;
-                                                    DBCC CHECKIDENT ('Consultas', RESEED, @MaxId);");
-
                     context.Consultas.Add(novaConsulta);
-                    context.SaveChanges();
-
-                    ObterConsultas(null);
                 }
                 else
                 {
-                    var consultaExistente = context.Consultas
-                                                    .FirstOrDefault(c =>
-                                                    c.ConsultaId == ConsultaSelecionada.ConsultaId);
-
+                    var consultaExistente = context.Consultas.Find(ConsultaSelecionada.ConsultaId);
                     if (consultaExistente != null)
                     {
                         consultaExistente.ConsultaData = ConsultaData;
                         consultaExistente.ConsultaHora = ConsultaHora;
                         consultaExistente.PacienteId = PacienteSelecionado?.pacienteId ?? 0;
                         consultaExistente.MedicoId = MedicoSelecionado?.medicoId ?? 0;
-
-                        context.SaveChanges();
-                        ObterConsultas(null);
                     }
                 }
+
+                context.SaveChanges();
+                ObterConsultas(null);
             }
         }
 
@@ -97,10 +91,8 @@ namespace WPFMobile
         {
             using (var context = new AppDBContext())
             {
-                var lista = context.Consultas
-                                   .Include(c => c.Paciente)
-                                   .Include(c => c.Medico)
-                                   .ToList();
+                var lista = context.Consultas.Include(c => c.Paciente)
+                                   .Include(c => c.Medico).ToList();
 
                 Consultas.Clear();
                 foreach (var consulta in lista)
